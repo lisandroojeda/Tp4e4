@@ -2,20 +2,25 @@ package ar.unrn.model;
 import static java.time.LocalDate.now;
 import static java.time.Month.of;
 
-public class CalculadorNoJubilado implements Calculador{
+public class CalculadorNoJubilado extends Calculador{
 
-        private LogTransaction log;
-        private int mesEnPromocion;
-        @Override
-        public double calcularPrecio(double precioProducto) {
-            double precioTotal = precioProducto;
-            if (of(mesEnPromocion).equals(now().getMonth())) {
-                precioTotal += precioProducto * 0.15;
-            } else {
-                precioTotal += precioProducto * 0.21;
-            }
-            log.log(CalculadorNoJubilado.class.getName());
-            return precioTotal;
-        };
+    private final double porcentajeDescuentoMesPromo = 0.15;
+    private final double porcentajeDescuentoMesNoProm = 0.21;
+
+    public CalculadorNoJubilado(int mesDePromocion) {
+        super(mesDePromocion);
     }
+
+    @Override
+    protected double mesDePromo(double precio) {
+        return precio + precio*porcentajeDescuentoMesPromo;
+    }
+
+    @Override
+    protected double mesSinPromo(double precio) {
+        return precio + precio*porcentajeDescuentoMesNoProm;
+    }
+
+
+}
 
